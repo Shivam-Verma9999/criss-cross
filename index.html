@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Criss-cross GAME</title>
+           <link rel="stylesheet" href="style.css">
+            <script type="text/javascript" src="script.js"></script>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body>
+        <header>
+            CRISS CROSS GAME
+        </header>
+        <div>
+            playerCount: <input min="0" id="inp_playerCount"type="number"/> <br/>
+            rows: <input min="0" id="inp_rows" type="number"/><br/>
+            columns: <input min="0" id="inp_columns" type="number"/><br/>
+            <button type="button" id="btn_start">Start</button><br/>
+        </div>
+        <div class="container">
+            <div id="gameContainer">
+              
+            </div>
+            
+        </div>
+        <div class="info" >
+            Total Players: <span id="playerCount"></span>
+            <br/>
+            Current Player: <span id="currentPlayer"></span>
+        </div>
+    </body>
+
+    <script>
+        let colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+		  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
+		  '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+		  '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
+		  '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+		  '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
+		  '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+		  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
+		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
+        let game;
+        let seed;
+        blockClicked = (x,y,event)=>{
+            console.log(x,y);
+            let playerNumber = game.currentPlayer;
+            if(game.tickBlock(x,y)){
+                event.target.innerHTML = playerNumber;
+                event.target.style.backgroundColor = colors[(game.currentPlayer*seed)%colors.length];
+                updateInfo();
+            }
+        }
+        makeColors = () => {
+            
+            for(let i =0 ; i < game.totalPlayers; i++){
+                colors.push(`rgba(${getRandom()},${getRandom()},${getRandom()},0.4)`)
+            }
+        }
+
+        getRandom = (num) => { 
+            
+            return Math.round(Math.random()*150)+100;
+        
+        }
+
+        updateInfo = ()=>{
+            document.querySelector("#playerCount").innerHTML = game.totalPlayers;
+            document.querySelector("#currentPlayer").innerHTML = game.currentPlayer;
+        }
+
+        populateBoard = ()=>{
+            let rows = game.rows;
+            let columns = game.columns;
+            let container = document.querySelector("#gameContainer");  
+            container.style.height = 'calc( 30px * ' + rows + ')';
+            container.style.width = 'calc( 30px * '+ columns + ')'; 
+            for(let i=0; i < rows; i++){
+                for(let j=0; j < columns; j++){
+                    let gameBlock = document.createElement("div");
+                    gameBlock.classList.add("gameBlock");
+                    gameBlock.onclick = (e)=>{blockClicked(i,j,e)};
+                    container.appendChild(gameBlock);
+                }
+            }
+        }
+
+        startGame = (rows, columns, players)=>{
+            if(rows <=0 || columns <=0 || players <=0){
+                alert("Cannot create game with given info");
+                return;
+            }
+            game = new CrossGame(rows,columns,players);
+            game.init();
+            document.querySelector("#gameContainer").innerHTML = "";
+            //makeColors();
+            seed = Math.round(Math.random(new Date())*colors.length)
+            populateBoard();
+            updateInfo();
+        }
+
+        btn_start.onclick = ()=>{
+            let playerCount= Number.parseInt(document.getElementById("inp_playerCount").value);
+            let rows= Number.parseInt(document.getElementById("inp_rows").value);
+            let columns = Number.parseInt(document.getElementById("inp_columns").value);
+            console.log(rows, columns, playerCount);
+            startGame(rows,columns, playerCount);
+        }
+
+
+
+    </script>
+
+</html>

@@ -1,0 +1,36 @@
+/* basic setup */
+body{
+    margin : 0px;
+    padding : 0px;
+    min-height: 100vh;
+}
+
+/* main styles */
+body{
+    background-color:aliceblue;
+    font-family: 'Courier New', Courier, monospace;
+}
+.container{
+    height: 500px;
+    display:flex;
+}
+#gameContainer{
+    margin: auto;
+    display:flex;
+    flex-wrap: wrap;
+    transition-duration: 0.4s;
+}
+
+.gameBlock{
+    background-color:rgba(116, 199, 255, 0.568);
+    border: 1px rgb(116, 199, 255) inset;
+    box-sizing: border-box;
+    width: 30px;
+    height: 30px; 
+    transition-duration:0.3s;  
+    cursor: pointer;
+    text-align: center;
+}
+.gameBlock:hover{
+    background-color: greenyellow;
+}
